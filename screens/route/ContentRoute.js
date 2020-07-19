@@ -176,9 +176,8 @@ const drawerContentOptions = {
   labelStyle: {
     fontSize: 16,
   },
-  tabStyle: {},
   style: {
-    backgroundColor: '#3A3A3A',
+    backgroundColor: '#161616',
     borderTopWidth: 0,
   },
   inactiveTintColor: 'white',

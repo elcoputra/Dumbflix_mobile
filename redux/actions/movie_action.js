@@ -40,8 +40,8 @@ import {
   CLEAR_DELETE_MOVIE_MESSAGE,
   CLEAR_DELETE_MOVIE_ERROR,
 } from '../actionTypes';
-import { API } from '../../config/axiosConfig';
-import { getDataEpisodes, addDataEpisodes } from '../actions/episode_action';
+import {API} from '../../config/axiosConfig';
+import {getDataEpisodes, addDataEpisodes} from '../actions/episode_action';
 
 // add movie
 export function addDataMovie(uploadFilm, uploadEpisodes) {
@@ -68,13 +68,13 @@ export function addDataMovie(uploadFilm, uploadEpisodes) {
 // add movie snackbar
 export function clearMessageAddMovieAction() {
   return function (dispatch) {
-    dispatch({ type: CLEAR_ADD_MOVIE_MESSAGE });
+    dispatch({type: CLEAR_ADD_MOVIE_MESSAGE});
   };
 }
 
 export function clearErrorAddMovieAction() {
   return function (dispatch) {
-    dispatch({ type: CLEAR_ADD_MOVIE_ERROR });
+    dispatch({type: CLEAR_ADD_MOVIE_ERROR});
   };
 }
 
@@ -85,7 +85,7 @@ export function getDataMovie() {
     });
     API.get('/category/1/movies')
       .then((response) =>
-        dispatch({ type: GET_MOVIES_SUCCSESS, payload: response.data.data }),
+        dispatch({type: GET_MOVIES_SUCCSESS, payload: response.data.data}),
       )
       .catch((response) =>
         dispatch({
@@ -103,7 +103,7 @@ export function getDataTv() {
     });
     API.get('/category/2/movies')
       .then((response) =>
-        dispatch({ type: GET_TV_SUCCSESS, payload: response.data.data }),
+        dispatch({type: GET_TV_SUCCSESS, payload: response.data.data}),
       )
       .catch((response) =>
         dispatch({
@@ -141,7 +141,7 @@ export function addEpisode(movieId, dataEpisode) {
       type: ADD_EPISODE_REQUEST,
     });
     API.post('/episode', dataEpisode)
-      .then(() => dispatch({ type: ADD_EPISODE_SUCCSESS, payload: false }))
+      .then(() => dispatch({type: ADD_EPISODE_SUCCSESS, payload: false}))
       .then(() => dispatch(getDataEpisodes(movieId)))
       .catch((response) =>
         dispatch({
@@ -175,13 +175,13 @@ export function updateMovieAction(id, data) {
 
 export function clearMessageUpdateMovieAction() {
   return function (dispatch) {
-    dispatch({ type: CLEAR_UPDATE_DETAIL_MOVIE_MESSAGE });
+    dispatch({type: CLEAR_UPDATE_DETAIL_MOVIE_MESSAGE});
   };
 }
 
 export function clearErrorUpdateMovieAction() {
   return function (dispatch) {
-    dispatch({ type: CLEAR_UPDATE_DETAIL_MOVIE_ERROR });
+    dispatch({type: CLEAR_UPDATE_DETAIL_MOVIE_ERROR});
   };
 }
 
@@ -207,12 +207,12 @@ export function deleteMovieAction(id) {
 
 export function clearMessageDeleteMovieAction() {
   return function (dispatch) {
-    dispatch({ type: CLEAR_DELETE_MOVIE_MESSAGE });
+    dispatch({type: CLEAR_DELETE_MOVIE_MESSAGE});
   };
 }
 
 export function clearErrorDeleteMovieAction() {
   return function (dispatch) {
-    dispatch({ type: CLEAR_DELETE_MOVIE_ERROR });
+    dispatch({type: CLEAR_DELETE_MOVIE_ERROR});
   };
 }

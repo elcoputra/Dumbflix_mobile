@@ -6,12 +6,11 @@ import Carousel, {ParallaxImage, Pagination} from 'react-native-snap-carousel';
 import {
   StyleSheet,
   View,
-  StatusBar,
+  RefreshControl,
   Image,
   ScrollView,
   Text,
   FlatList,
-  ImageBackground,
   TouchableOpacity,
   Dimensions,
   Platform,
@@ -19,33 +18,47 @@ import {
 
 import {connect} from 'react-redux';
 
+import {getDataMovie, getDataTv} from '../redux/actions/movie_action';
+
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
-import Joker from '../img/header/joker_mobile_slide.jpg';
-
+// Data couresel
 const ENTRIES1 = [
   {
+    id: 81,
     title: 'Joker',
-    subtitle: 'Lorem ipsum dolor sit amet',
     illustration: 'https://i.imgur.com/0Debo6z.jpg',
   },
   {
+    id: 41,
     title: 'La Casa De Papel',
-    subtitle: 'Lorem ipsum dolor sit amet',
     illustration: 'https://i.imgur.com/VA0UDs7.jpg',
   },
   {
+    id: 2,
     title: 'The Witcher',
-    subtitle: 'Lorem ipsum dolor sit amet et nuncat mergitur',
     illustration: 'https://i.imgur.com/TSzk0ns.jpg',
   },
 ];
+const wait = (timeout) => {
+  return new Promise((resolve) => {
+    setTimeout(resolve, timeout);
+  });
+};
 const {width: screenWidth} = Dimensions.get('window');
 
-function Home({navigation}) {
+function Home(props) {
   const [entries, setEntries] = useState([]);
   const [activeSlide, setActiveSlide] = useState(0);
   const carouselRef = useRef(null);
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    props.getDataMovie();
+    props.getDataTv();
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
 
   const goForward = () => {
     carouselRef.current.snapToNext();
@@ -54,10 +67,12 @@ function Home({navigation}) {
 
   useEffect(() => {
     setEntries(ENTRIES1);
+    props.getDataMovie();
+    props.getDataTv();
   }, []);
 
   const openSideMenu = () => {
-    navigation.openDrawer();
+    props.navigation.openDrawer();
   };
 
   const renderItem = ({item, index}, parallaxProps) => {
@@ -89,17 +104,17 @@ function Home({navigation}) {
         activeDotIndex={activeSlide}
         // containerStyle={{backgroundColor: 'rgba(0, 0, 0, 0.75)'}}
         dotStyle={styles.dotStyle}
-        inactiveDotStyle={
-          {
-            // Define styles for inactive dots here
-          }
-        }
+        // inactiveDotStyle={
+        //   {
+        //   }
+        // }
         inactiveDotOpacity={0.4}
         inactiveDotScale={0.6}
       />
     );
   }
-
+  const {dataMovies} = props.movieReducer;
+  const {dataTvSeries} = props.tvReducer;
   return (
     <View style={styles.container}>
       {/* Navbar */}
@@ -117,34 +132,94 @@ function Home({navigation}) {
         <View style={styles.searchContainer}>
           <TouchableOpacity
             style={styles.btnSearch}
-            onPress={() => navigation.navigate('Search')}>
+            onPress={() => props.navigation.navigate('Search')}>
             <AntDesign name="search1" color="white" size={25} />
           </TouchableOpacity>
         </View>
       </View>
       {/* Content */}
-      <View style={styles.carouselContainer}>
-        {/* <TouchableOpacity onPress={goForward}>
+      <ScrollView
+        style={styles.scrollViewContent}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
+        <View style={styles.carouselContainer}>
+          {/* <TouchableOpacity onPress={goForward}>
           <Text>go to next slide</Text>
         </TouchableOpacity> */}
-        <Carousel
-          ref={carouselRef}
-          sliderWidth={screenWidth}
-          sliderHeight={screenWidth}
-          itemWidth={screenWidth - 20}
-          data={entries}
-          renderItem={renderItem}
-          loopClonesPerSide={3}
-          onSnapToItem={(index) => setActiveSlide(index)}
-          lockScrollWhileSnapping={true}
-          autoplay={true}
-          hasParallaxImages={true}
-          showSpinner={true}
-          loop={true}
-          enableSnap={true}
-        />
-        <CompPagination />
-      </View>
+          <Carousel
+            ref={carouselRef}
+            sliderWidth={screenWidth}
+            sliderHeight={screenWidth}
+            itemWidth={screenWidth - 20}
+            data={entries}
+            renderItem={renderItem}
+            loopClonesPerSide={3}
+            onBeforeSnapToItem={(index) => setActiveSlide(index)}
+            lockScrollWhileSnapping={true}
+            autoplay={true}
+            hasParallaxImages={true}
+            showSpinner={true}
+            loop={true}
+            enableSnap={true}
+          />
+          <CompPagination />
+        </View>
+        <View style={styles.containerCardRoot}>
+          <Text style={styles.titleList}>NEW MOVIES</Text>
+        </View>
+        <View style={styles.containerCardRoot}>
+          <FlatList
+            style={styles.flatList}
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
+            horizontal={true}
+            data={dataMovies}
+            renderItem={({item, index}) => {
+              return (
+                <TouchableOpacity>
+                  <View style={styles.containerCard}>
+                    <View style={styles.containerImageCard}>
+                      <Image
+                        style={styles.containerImageCard}
+                        source={{uri: item.thumbnail}}
+                      />
+                    </View>
+                  </View>
+                </TouchableOpacity>
+              );
+            }}
+            keyExtractor={(item) => `key-${item.id}`}
+          />
+        </View>
+        <View style={styles.containerCardRoot}>
+          <Text style={styles.titleList}>NEW SERIES</Text>
+        </View>
+        <View style={styles.containerCardRoot}>
+          <FlatList
+            style={styles.flatList}
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
+            horizontal={true}
+            data={dataTvSeries}
+            renderItem={({item, index}) => {
+              return (
+                <TouchableOpacity>
+                  <View style={styles.containerCard}>
+                    <View style={styles.containerImageCard}>
+                      <Image
+                        style={styles.containerImageCard}
+                        source={{uri: item.thumbnail}}
+                      />
+                    </View>
+                  </View>
+                </TouchableOpacity>
+              );
+            }}
+            keyExtractor={(item) => `key-${item.id}`}
+          />
+        </View>
+      </ScrollView>
     </View>
   );
 }
@@ -154,7 +229,33 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#161616',
   },
+  navbar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 10,
+    backgroundColor: '#161616',
+    height: 45,
+  },
+  menuContainer: {flex: 0.3},
+  btnMenu: {width: '100%'},
+  imgContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+  },
+  imageHome: {flex: 1, height: '100%'},
+
+  searchContainer: {
+    flex: 0.3,
+  },
+  btnSearch: {
+    width: '100%',
+    alignItems: 'flex-end',
+  },
+  scrollViewContent: {flex: 1},
   // CAROUSEL
+  carouselContainer: {flex: 1},
   item: {
     width: screenWidth - 20,
     height: screenWidth - 200,
@@ -167,6 +268,7 @@ const styles = StyleSheet.create({
     marginBottom: Platform.select({ios: 0, android: 1}), // Prevent a random Android rendering issue
     backgroundColor: 'white',
     borderRadius: 5,
+
     width: '100%',
     height: '100%',
   },
@@ -195,37 +297,35 @@ const styles = StyleSheet.create({
     backgroundColor: '#DB202C',
   },
   // CAROUSEL END
-  navbar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 10,
-    backgroundColor: '#161616',
-    height: 45,
-  },
-  menuContainer: {flex: 0.3},
-  btnMenu: {width: '100%'},
-  imgContainer: {
+  // Bagian Card
+  containerCardRoot: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+    paddingBottom: 20,
+    paddingLeft: 10,
   },
-  imageHome: {flex: 1, height: '100%'},
-
-  searchContainer: {
-    flex: 0.3,
+  titleList: {textAlign: 'left', color: '#b7b7b7', fontSize: 14},
+  containerCard: {
+    borderRadius: 10,
+    marginRight: 10,
+    backgroundColor: 'transparent',
   },
-  btnSearch: {
-    width: '100%',
-    alignItems: 'flex-end',
+  containerImageCard: {
+    borderRadius: 10,
+    height: screenWidth - 215,
+    width: screenWidth - 280,
+    backgroundColor: '#7c7f81',
+  },
+  containerTitleText: {
+    marginTop: 5,
+    color: '#ababab',
   },
 });
 
 const mapStateToProps = (state) => {
-  return {};
+  return {movieReducer: state.movieReducer, tvReducer: state.tvReducer};
 };
 
-export default connect(mapStateToProps, {})(Home);
+export default connect(mapStateToProps, {getDataMovie, getDataTv})(Home);
 
 // // BACKUP
 // /* eslint-disable react-hooks/exhaustive-deps */

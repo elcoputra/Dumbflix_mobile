@@ -25,47 +25,52 @@ import Upgrade from '../upgrade';
 const Drawer = createDrawerNavigator();
 
 const width = Dimensions.get('screen').width;
+
+const UpgradeStack = createStackNavigator();
 function Content(props) {
+  const {userState} = props.authReducer;
+  const subscribe = userState.subscribe;
   return (
     <>
       <NavigationContainer>
-        <Drawer.Navigator
-          drawerStyle={styles.drawerStyle}
-          drawerContentOptions={drawerContentOptions}>
-          <Drawer.Screen
-            name="Home"
-            component={HomeRoute}
-            options={{
-              drawerIcon: ({color, size}) => (
-                <AntDesign name="home" color={color} size={size} />
-              ),
-            }}
-          />
-          <Drawer.Screen
-            name="Movies"
-            component={MoviesRoute}
-            options={{
-              drawerIcon: ({color, size}) => (
-                <MaterialCommunityIcons
-                  name="movie-open"
-                  color={color}
-                  size={size}
-                />
-              ),
-            }}
-          />
-          <Drawer.Screen
-            name="Tv Series"
-            component={TVRoute}
-            options={{
-              drawerIcon: ({color, size}) => (
-                <Feather name="tv" color={color} size={size} />
-              ),
-            }}
-          />
+        {subscribe ? (
+          <Drawer.Navigator
+            drawerStyle={styles.drawerStyle}
+            drawerContentOptions={drawerContentOptions}>
+            <Drawer.Screen
+              name="Home"
+              component={HomeRoute}
+              options={{
+                drawerIcon: ({color, size}) => (
+                  <AntDesign name="home" color={color} size={size} />
+                ),
+              }}
+            />
+            <Drawer.Screen
+              name="Movies"
+              component={MoviesRoute}
+              options={{
+                drawerIcon: ({color, size}) => (
+                  <MaterialCommunityIcons
+                    name="movie-open"
+                    color={color}
+                    size={size}
+                  />
+                ),
+              }}
+            />
+            <Drawer.Screen
+              name="Tv Series"
+              component={TVRoute}
+              options={{
+                drawerIcon: ({color, size}) => (
+                  <Feather name="tv" color={color} size={size} />
+                ),
+              }}
+            />
 
-          {/* Upgrade page pindahin di sesudah register */}
-          {/* <Drawer.Screen
+            {/* Upgrade page pindahin di sesudah register */}
+            {/* <Drawer.Screen
             name="Upgrade"
             component={Upgrade}
             options={{
@@ -75,20 +80,29 @@ function Content(props) {
             }}
           /> */}
 
-          <Drawer.Screen
-            name="Profile"
-            component={Profile}
-            options={{
-              drawerIcon: ({color, size}) => (
-                <MaterialCommunityIcons
-                  name="face-profile"
-                  color={color}
-                  size={size}
-                />
-              ),
-            }}
-          />
-        </Drawer.Navigator>
+            <Drawer.Screen
+              name="Profile"
+              component={Profile}
+              options={{
+                drawerIcon: ({color, size}) => (
+                  <MaterialCommunityIcons
+                    name="face-profile"
+                    color={color}
+                    size={size}
+                  />
+                ),
+              }}
+            />
+          </Drawer.Navigator>
+        ) : (
+          <UpgradeStack.Navigator>
+            <UpgradeStack.Screen
+              options={{headerShown: false}}
+              name="Upgrade"
+              component={Upgrade}
+            />
+          </UpgradeStack.Navigator>
+        )}
       </NavigationContainer>
     </>
   );
@@ -186,7 +200,9 @@ const headerNoTitleMatchBodyColor = {
 };
 
 const mapStateToProps = (state) => {
-  return {};
+  return {
+    authReducer: state.authReducer,
+  };
 };
 
 export default connect(mapStateToProps, {})(Content);

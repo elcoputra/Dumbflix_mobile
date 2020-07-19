@@ -16,7 +16,7 @@ function App(props) {
   const {userState} = props.authReducer;
   return (
     <>
-      <StatusBar barStyle="light-content" backgroundColor="#151515" />
+      <StatusBar barStyle="light-content" backgroundColor="#161616" />
       {userState.isLogin ? <Content /> : <Logout />}
     </>
   );

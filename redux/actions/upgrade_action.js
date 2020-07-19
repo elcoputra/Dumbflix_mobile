@@ -1,9 +1,15 @@
-import { UPGRADE_ERROR, UPGRADE_REQUEST, UPGRADE_SUCCSESS, CLEAR_UPGRADE_MESSAGE, CLEAR_UPGRADE_ERROR } from '../actionTypes';
-import { API } from '../../config/axiosConfig';
+import {
+  UPGRADE_ERROR,
+  UPGRADE_REQUEST,
+  UPGRADE_SUCCSESS,
+  CLEAR_UPGRADE_MESSAGE,
+  CLEAR_UPGRADE_ERROR,
+} from '../actionTypes';
+import {API} from '../../config/axiosConfig';
 
 export function upgradeAction(upgrade) {
   return function (dispatch) {
-    dispatch({ type: UPGRADE_REQUEST });
+    dispatch({type: UPGRADE_REQUEST});
     API.post('/transaction', upgrade)
       .then((response) =>
         dispatch({
@@ -21,11 +27,11 @@ export function upgradeAction(upgrade) {
 }
 export function clearMessageUpgrade() {
   return function (dispatch) {
-    dispatch({ type: CLEAR_UPGRADE_MESSAGE });
+    dispatch({type: CLEAR_UPGRADE_MESSAGE});
   };
 }
 export function clearErrorUpgrade() {
   return function (dispatch) {
-    dispatch({ type: CLEAR_UPGRADE_ERROR });
+    dispatch({type: CLEAR_UPGRADE_ERROR});
   };
 }

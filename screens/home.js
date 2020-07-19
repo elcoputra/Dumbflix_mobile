@@ -27,6 +27,7 @@ function Home({navigation}) {
 
   return (
     <View style={styles.container}>
+      {/* Navbar */}
       <View style={styles.navbar}>
         <View style={styles.menuContainer}>
           <TouchableOpacity style={styles.btnMenu} onPress={openSideMenu}>
@@ -46,6 +47,7 @@ function Home({navigation}) {
           </TouchableOpacity>
         </View>
       </View>
+      {/* Content */}
     </View>
   );
 }

@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useEffect} from 'react';
 import {
   StyleSheet,
   View,
@@ -16,6 +17,9 @@ import {logoutUser, authAction} from '../redux/actions/auth_action';
 import {upgradeAction} from '../redux/actions/upgrade_action';
 
 function Upgrade(props) {
+  useEffect(() => {
+    props.authAction();
+  }, []);
   // hook, di dalem value usesate adalah data di dalam data register
   const [dataSubscribe, setDataSubscribe] = React.useState({});
   // extract value object dala data register
@@ -25,8 +29,9 @@ function Upgrade(props) {
     setDataSubscribe({...dataSubscribe, [name]: text});
     console.log(dataSubscribe);
   };
-  const {userState} = props.authReducer;
+
   const handleSubmit = async () => {
+    const {userState} = props.authReducer;
     setDataSubscribe({...dataSubscribe, userId: userState.id});
     await props.upgradeAction(dataSubscribe);
   };

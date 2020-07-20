@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useState} from 'react';
+import Orientation from 'react-native-orientation';
 import {
   Image,
   Text,
@@ -21,6 +22,17 @@ import LinearGradient from 'react-native-linear-gradient';
 
 const statusBarHeight = StatusBar.currentHeight;
 function Episodes(props) {
+  const [orit, setOrit] = useState();
+  const initial = Orientation.getInitialOrientation();
+  if (initial === 'LANDSCAPE-LEFT' || orit !== 'LANDSCAPE-LEFT') {
+    // do something
+    if (orit !== initial) {
+      Orientation.lockToPortrait();
+      setOrit('LANDSCAPE-LEFT');
+    }
+  } else {
+    // do something else
+  }
   const {dataDetailMovie} = props.detailMovieReducer;
   const {dataEpisode} = props.episodeReducer;
   return (
@@ -102,7 +114,12 @@ function Episodes(props) {
           data={dataEpisode}
           renderItem={({item, index}) => {
             return (
-              <TouchableOpacity onPress={null}>
+              <TouchableOpacity
+                onPress={() =>
+                  props.navigation.navigate('VideoPlayer', {
+                    url: item.linkEpisode,
+                  })
+                }>
                 <View style={styles.rootCardRow}>
                   <View style={styles.imageCardContainer}>
                     <Image

@@ -22,6 +22,7 @@ import TvSeries from '../TvSeries';
 import Search from '../search';
 import Upgrade from '../upgrade';
 import Episodes from '../episodes';
+import VideoPlayer from '../videoPlayer';
 
 const Drawer = createDrawerNavigator();
 
@@ -129,6 +130,11 @@ function HomeRoute() {
           options={{headerShown: false}}
           name="Episodes"
           component={Episodes}
+        />
+        <HomeStack.Screen
+          options={{headerShown: false}}
+          name="VideoPlayer"
+          component={VideoPlayer}
         />
       </HomeStack.Navigator>
     </>

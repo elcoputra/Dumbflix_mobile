@@ -25,7 +25,7 @@ import {
   CLEAR_UPDATE_EPISODE_MESSAGE,
   CLEAR_UPDATE_EPISODE_ERROR,
 } from '../actionTypes';
-import { API } from '../../config/axiosConfig';
+import {API} from '../../config/axiosConfig';
 
 export function addDataEpisodes(movieId, bulkEpisodes) {
   return function (dispatch) {
@@ -55,13 +55,13 @@ export function addDataEpisodes(movieId, bulkEpisodes) {
 }
 export function clearMessageAddEpisodeAction() {
   return function (dispatch) {
-    dispatch({ type: CLEAR_ADD_EPISODES_MESSAGE });
+    dispatch({type: CLEAR_ADD_EPISODES_MESSAGE});
   };
 }
 
 export function clearErrorAddEpisodeAction() {
   return function (dispatch) {
-    dispatch({ type: CLEAR_ADD_EPISODES_ERROR });
+    dispatch({type: CLEAR_ADD_EPISODES_ERROR});
   };
 }
 
@@ -110,13 +110,13 @@ export function deleteEpisodeAction(id) {
 
 export function clearMessageDeleteEpisodeAction() {
   return function (dispatch) {
-    dispatch({ type: CLEAR_UPDATE_DETAIL_MOVIE_MESSAGE });
+    dispatch({type: CLEAR_UPDATE_DETAIL_MOVIE_MESSAGE});
   };
 }
 
 export function clearErrorDeleteEpisodeAction() {
   return function (dispatch) {
-    dispatch({ type: CLEAR_UPDATE_DETAIL_MOVIE_ERROR });
+    dispatch({type: CLEAR_UPDATE_DETAIL_MOVIE_ERROR});
   };
 }
 // update episode async await
@@ -142,12 +142,12 @@ export function updateEpisodeAction(id, data) {
 
 export function clearMessageUpdateEpisodeAction() {
   return function (dispatch) {
-    dispatch({ type: CLEAR_UPDATE_EPISODE_MESSAGE });
+    dispatch({type: CLEAR_UPDATE_EPISODE_MESSAGE});
   };
 }
 
 export function clearErrorUpdateEpisodeAction() {
   return function (dispatch) {
-    dispatch({ type: CLEAR_UPDATE_EPISODE_ERROR });
+    dispatch({type: CLEAR_UPDATE_EPISODE_ERROR});
   };
 }

@@ -165,7 +165,10 @@ const initialDataUpdateEpisode = {
   messageUpdateEpisode: '',
   errorUpdateEpisode: '',
 };
-export const updateEpisodeReducer = (state = initialDataUpdateEpisode, action) => {
+export const updateEpisodeReducer = (
+  state = initialDataUpdateEpisode,
+  action,
+) => {
   switch (action.type) {
     case UPDATE_EPISODE_REQUEST:
       return {

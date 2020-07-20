@@ -18,7 +18,12 @@ import {
 
 import {connect} from 'react-redux';
 
-import {getDataMovie, getDataTv} from '../redux/actions/movie_action';
+import {
+  getDataMovie,
+  getDataTv,
+  getDetailMovie,
+} from '../redux/actions/movie_action';
+import {getDataEpisodes} from '../redux/actions/episode_action';
 
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
@@ -31,13 +36,18 @@ const ENTRIES1 = [
   },
   {
     id: 41,
-    title: 'La Casa De Papel',
-    illustration: 'https://i.imgur.com/VA0UDs7.jpg',
+    title: 'Money Heist',
+    illustration: 'https://i.imgur.com/2kRJRPj.jpg',
   },
   {
     id: 2,
     title: 'The Witcher',
     illustration: 'https://i.imgur.com/TSzk0ns.jpg',
+  },
+  {
+    id: 1,
+    title: 'Your Name',
+    illustration: 'https://i.imgur.com/OsIzanc.jpg',
   },
 ];
 const wait = (timeout) => {
@@ -60,11 +70,6 @@ function Home(props) {
     wait(2000).then(() => setRefreshing(false));
   }, []);
 
-  const goForward = () => {
-    carouselRef.current.snapToNext();
-    console.log(entries);
-  };
-
   useEffect(() => {
     setEntries(ENTRIES1);
     props.getDataMovie();
@@ -75,20 +80,32 @@ function Home(props) {
     props.navigation.openDrawer();
   };
 
+  const getEpisodes = async (id) => {
+    try {
+      await props.getDetailMovie(id);
+      await props.getDataEpisodes(id);
+      props.navigation.navigate('Episodes');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const renderItem = ({item, index}, parallaxProps) => {
     return (
       <View style={styles.item}>
         <TouchableOpacity
           style={styles.touchSlide}
-          onPress={() => console.log(item.title)}>
+          onPress={() => getEpisodes(item.id)}>
           <ParallaxImage
             source={{uri: item.illustration}}
             containerStyle={styles.imageContainer}
             style={styles.image}
-            parallaxFactor={0.4}
+            showSpinner={true}
+            spinnerColor="red"
+            parallaxFactor={0.3}
             {...parallaxProps}
           />
-          <Text style={styles.title}>{item.title}</Text>
+          <Text style={styles.title}>PLAY NOW</Text>
         </TouchableOpacity>
         {/* <Text style={styles.title} numberOfLines={2}>
           {item.title}
@@ -141,7 +158,12 @@ function Home(props) {
       <ScrollView
         style={styles.scrollViewContent}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          <RefreshControl
+            colors={['#FFFFFF', '#FF7A7A', 'red']}
+            progressBackgroundColor="#161616"
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
         }>
         <View style={styles.carouselContainer}>
           {/* <TouchableOpacity onPress={goForward}>
@@ -177,7 +199,7 @@ function Home(props) {
             data={dataMovies}
             renderItem={({item, index}) => {
               return (
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => getEpisodes(item.id)}>
                   <View style={styles.containerCard}>
                     <View style={styles.containerImageCard}>
                       <Image
@@ -204,7 +226,7 @@ function Home(props) {
             data={dataTvSeries}
             renderItem={({item, index}) => {
               return (
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => getEpisodes(item.id)}>
                   <View style={styles.containerCard}>
                     <View style={styles.containerImageCard}>
                       <Image
@@ -266,7 +288,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     marginBottom: Platform.select({ios: 0, android: 1}), // Prevent a random Android rendering issue
-    backgroundColor: 'white',
+
     borderRadius: 5,
 
     width: '100%',
@@ -281,11 +303,12 @@ const styles = StyleSheet.create({
   title: {
     position: 'absolute',
     bottom: 10,
+    textAlign: 'center',
     left: 10,
-    backgroundColor: 'rgba(0, 0, 0, 0.56)',
+    backgroundColor: '#db202c',
     borderRadius: 5,
-    padding: 5,
-    fontSize: 28,
+    paddingHorizontal: 10,
+    fontSize: 22,
     color: 'white',
   },
 
@@ -325,7 +348,12 @@ const mapStateToProps = (state) => {
   return {movieReducer: state.movieReducer, tvReducer: state.tvReducer};
 };
 
-export default connect(mapStateToProps, {getDataMovie, getDataTv})(Home);
+export default connect(mapStateToProps, {
+  getDataMovie,
+  getDetailMovie,
+  getDataTv,
+  getDataEpisodes,
+})(Home);
 
 // // BACKUP
 // /* eslint-disable react-hooks/exhaustive-deps */

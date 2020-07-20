@@ -136,7 +136,7 @@ export const movieReducer = (state = initialStateMovie, action) => {
       return {
         ...state,
         loading: false,
-        dataMovies: action.payload,
+        dataMovies: action.payload.reverse(),
       };
     case GET_MOVIES_ERROR:
       return {
@@ -166,7 +166,7 @@ export const tvReducer = (state = initialStateTV, action) => {
       return {
         ...state,
         loadingTV: false,
-        dataTvSeries: action.payload,
+        dataTvSeries: action.payload.reverse(),
       };
     case GET_TV_ERROR:
       return {

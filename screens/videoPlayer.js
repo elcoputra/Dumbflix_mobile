@@ -1,12 +1,6 @@
-import React, {useRef, useState} from 'react';
-import Orientation from 'react-native-orientation';
-import {
-  StyleSheet,
-  View,
-  StatusBar,
-  TouchableHighlight,
-  Text,
-} from 'react-native';
+import React, {useRef, useState, useEffect} from 'react';
+import Orientation from 'react-native-orientation-locker';
+import {StyleSheet, View, StatusBar, TouchableHighlight} from 'react-native';
 import MediaControls, {PLAYER_STATES} from 'react-native-media-controls';
 
 import Video from 'react-native-video';
@@ -15,28 +9,21 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 
 import {connect} from 'react-redux';
 
-const statusBarHeight = StatusBar.currentHeight;
-const noop = () => {};
 function VideoPlayer(props) {
   const videoPlayer = useRef(null);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [isFullScreen, setIsFullScreen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [paused, setPaused] = useState(false);
   const [playerState, setPlayerState] = useState(PLAYER_STATES.PLAYING);
-  const [orit, setOrit] = useState();
 
-  const initial = Orientation.getInitialOrientation();
-  if (initial === 'PORTRAIT') {
-    // do something
-    if (orit !== initial) {
+  useEffect(() => {
+    const unsubscribe = props.navigation.addListener('focus', () => {
       Orientation.lockToLandscapeLeft();
-      setOrit('PORTRAIT');
-    }
-  } else {
-    // do something else
-  }
+    });
+
+    return unsubscribe;
+  }, [props.navigation]);
 
   const onSeek = (seek) => {
     videoPlayer?.current.seek(seek);
@@ -100,7 +87,7 @@ function VideoPlayer(props) {
         fullscreen={true}
         paused={paused}
         ref={(ref) => (videoPlayer.current = ref)}
-        resizeMode="cover"
+        resizeMode="contain"
         source={{
           uri: url,
         }}
@@ -108,11 +95,9 @@ function VideoPlayer(props) {
         volume={1}
       />
       <MediaControls
-        isFullScreen={isFullScreen}
         duration={duration}
         isLoading={isLoading}
         mainColor="red"
-        onFullScreen={noop}
         onPaused={onPaused}
         onReplay={onReplay}
         onSeek={onSeek}
@@ -126,11 +111,6 @@ function VideoPlayer(props) {
             </TouchableHighlight>
           </View>
           <View style={styles.searchContainer}>
-            {/* <TouchableHighlight
-              style={styles.btnSearch}
-              onPress={Orientation.lockToLandscapeLeft}>
-              <AntDesign name="search1" color="white" size={25} />
-            </TouchableHighlight> */}
             <TouchableHighlight style={styles.btnSearch} onPress={searchPress}>
               <AntDesign name="search1" color="white" size={25} />
             </TouchableHighlight>
@@ -140,7 +120,6 @@ function VideoPlayer(props) {
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

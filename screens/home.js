@@ -30,12 +30,12 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 // Data couresel
 const ENTRIES1 = [
   {
-    id: 81,
+    id: 17,
     title: 'Joker',
     illustration: 'https://i.imgur.com/0Debo6z.jpg',
   },
   {
-    id: 41,
+    id: 5,
     title: 'Money Heist',
     illustration: 'https://i.imgur.com/2kRJRPj.jpg',
   },

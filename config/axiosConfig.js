@@ -1,9 +1,9 @@
 import axios from 'axios';
+import {API_URL} from '@env';
 
 // Set config defaults when creating the instance
 export const API = axios.create({
-  baseURL: 'http://192.168.100.188:5000/api/v1',
-  // baseURL: process.env.REACT_APP_URL_BACKEND,
+  baseURL: API_URL,
 });
 
 // Alter defaults after instance has been created

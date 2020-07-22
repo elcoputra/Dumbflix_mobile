@@ -32,8 +32,11 @@ function Upgrade(props) {
 
   const handleSubmit = async () => {
     const {userState} = props.authReducer;
-    setDataSubscribe({...dataSubscribe, userId: userState.id});
-    await props.upgradeAction(dataSubscribe);
+    setDataSubscribe({userId: userState.id});
+    upgrade();
+  };
+  const upgrade = () => {
+    props.upgradeAction(dataSubscribe);
   };
 
   const logutAccount = async () => {
@@ -41,6 +44,7 @@ function Upgrade(props) {
     props.logoutUser();
     props.authAction();
   };
+  const {errorUpgrade, errorUpgradeBool} = props.upgradeReducer;
   return (
     <View style={styles.container}>
       <View style={styles.navbar}>
@@ -75,6 +79,11 @@ function Upgrade(props) {
       <View style={styles.inputContainer}>
         <ScrollView style={styles.scrolViewStyle}>
           <View style={styles.inputContainer2}>
+            {errorUpgradeBool ? (
+              <Text style={styles.error}>
+                {errorUpgrade ? errorUpgrade : null}
+              </Text>
+            ) : null}
             <TextInput
               onChangeText={(text) => {
                 onChangeText(text, 'bankAccount');
@@ -115,6 +124,8 @@ const styles = StyleSheet.create({
     width: '100%',
     padding: 20,
   },
+  error: {color: 'red'},
+  message: {color: 'green'},
   // Navbar
   navbar: {
     flexDirection: 'row',
@@ -207,7 +218,10 @@ const styles = StyleSheet.create({
   },
 });
 const mapStateToProps = (state) => {
-  return {authReducer: state.authReducer};
+  return {
+    authReducer: state.authReducer,
+    upgradeReducer: state.upgradeReducer,
+  };
 };
 export default connect(mapStateToProps, {
   logoutUser,

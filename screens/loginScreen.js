@@ -23,12 +23,12 @@ function Login(props) {
   // data dalam objek state data register berubah
   const onChangeText = (text, name) => {
     setdataRegister({...dataRegister, [name]: text});
-    console.log(dataRegister);
   };
   const submitLogin = () => {
     props.loginAction(dataRegister);
     setdataRegister({});
   };
+  const {error, errorBool} = props.userReducer;
   return (
     <View style={styles.container}>
       <View style={styles.contentContainer}>
@@ -42,6 +42,15 @@ function Login(props) {
         <View style={styles.inputContainer}>
           <ScrollView style={styles.scrolViewStyle}>
             <View style={styles.inputContainer2}>
+              {errorBool ? (
+                <Text style={styles.error}>
+                  {error.data.error
+                    ? error.data.error
+                    : error.data.message
+                    ? error.data.message
+                    : null}
+                </Text>
+              ) : null}
               <TextInput
                 onChangeText={(text) => {
                   onChangeText(text, 'email');
@@ -96,6 +105,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#161616',
     alignItems: 'center',
   },
+  error: {color: 'red'},
+  message: {color: 'green'},
   scrolViewStyle: {
     width: '100%',
     // backgroundColor: 'gray',
@@ -194,4 +205,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(null, {loginAction})(Login);
+const mapStateToProps = (state) => {
+  return {
+    userReducer: state.userReducer,
+  };
+};
+
+export default connect(mapStateToProps, {loginAction})(Login);

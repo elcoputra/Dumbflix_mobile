@@ -39,6 +39,11 @@ import {
   DELETE_MOVIE_ERROR,
   CLEAR_DELETE_MOVIE_MESSAGE,
   CLEAR_DELETE_MOVIE_ERROR,
+
+  // Search
+  SEARCH_MOVIES_REQUEST,
+  SEARCH_MOVIES_SUCCESS,
+  SEARCH_MOVIES_ERROR,
 } from '../actionTypes';
 
 const initialStateAddMovie = {
@@ -296,6 +301,42 @@ export const deleteMovieReducer = (state = initialDeleteMovie, action) => {
         ...state,
         errorDeleteMovieBool: false,
         errorDeleteMovie: '',
+      };
+    default:
+      return state;
+  }
+};
+
+const initialMoviesSearch = {
+  dataSearch: [],
+  loadingSearch: false,
+  message: 'Dengarkan Dan Rasakan',
+  messageBool: false,
+  error: [],
+};
+
+export const getSearchMoviesReducer = (state = initialMoviesSearch, action) => {
+  switch (action.type) {
+    case SEARCH_MOVIES_REQUEST:
+      return {
+        ...state,
+        loadingSearch: true,
+        messageBool: false,
+      };
+    case SEARCH_MOVIES_SUCCESS:
+      return {
+        ...state,
+        loadingSearch: false,
+        messageBool: action.messageBool,
+        dataSearch: action.payload,
+        message: action.message,
+      };
+    case SEARCH_MOVIES_ERROR:
+      return {
+        ...state,
+        loadingSearch: false,
+        messageBool: false,
+        error: action.payload,
       };
     default:
       return state;

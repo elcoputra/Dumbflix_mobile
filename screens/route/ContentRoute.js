@@ -124,7 +124,7 @@ function HomeRoute() {
         <HomeStack.Screen
           options={headerNoTitleMatchBodyColor}
           name="Search"
-          component={Search}
+          component={SearchRoute}
         />
         <HomeStack.Screen
           options={{headerShown: false}}
@@ -154,7 +154,17 @@ function MoviesRoute() {
         <MoviesStack.Screen
           options={headerNoTitleMatchBodyColor}
           name="Search"
-          component={Search}
+          component={SearchRoute}
+        />
+        <MoviesStack.Screen
+          options={{headerShown: false}}
+          name="Episodes"
+          component={Episodes}
+        />
+        <MoviesStack.Screen
+          options={{headerShown: false}}
+          name="VideoPlayer"
+          component={VideoPlayer}
         />
       </MoviesStack.Navigator>
     </>
@@ -174,9 +184,33 @@ function TVRoute() {
         <TVStack.Screen
           options={headerNoTitleMatchBodyColor}
           name="Search"
-          component={Search}
+          component={SearchRoute}
+        />
+        <TVStack.Screen
+          options={{headerShown: false}}
+          name="Episodes"
+          component={Episodes}
+        />
+        <TVStack.Screen
+          options={{headerShown: false}}
+          name="VideoPlayer"
+          component={VideoPlayer}
         />
       </TVStack.Navigator>
+    </>
+  );
+}
+const SearchStack = createStackNavigator();
+function SearchRoute() {
+  return (
+    <>
+      <SearchStack.Navigator>
+        <SearchStack.Screen
+          options={{headerShown: false}}
+          name="Search"
+          component={Search}
+        />
+      </SearchStack.Navigator>
     </>
   );
 }
@@ -198,7 +232,7 @@ const drawerContentOptions = {
 };
 
 const headerNoTitleMatchBodyColor = {
-  title: '',
+  title: 'Search',
   headerStyle: {
     backgroundColor: 'rgb(22, 22, 22)',
     height: 40,

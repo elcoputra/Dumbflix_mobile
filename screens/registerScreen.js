@@ -33,9 +33,19 @@ function Register(props) {
     props.registerAction(dataRegister);
     setdataRegister({gender: 'Male', isAdmin: false});
   };
+  const {error, errorBool} = props.userReducer;
   return (
     <View style={styles.container}>
       <View style={styles.contentContainer}>
+        {errorBool ? (
+          <Text style={styles.error}>
+            {error.data.error
+              ? error.data.error
+              : error.data.message
+              ? error.data.message
+              : null}
+          </Text>
+        ) : null}
         <View style={styles.logoContainer}>
           <Image
             resizeMode={'contain'}
@@ -171,6 +181,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#161616',
     alignItems: 'center',
   },
+  error: {color: 'red'},
+  message: {color: 'green'},
   scrolViewStyle: {
     width: '100%',
     // backgroundColor: 'gray',
@@ -300,5 +312,9 @@ const pickerSelectStyles = StyleSheet.create({
     right: 15,
   },
 });
-
-export default connect(null, {registerAction})(Register);
+const mapStateToProps = (state) => {
+  return {
+    userReducer: state.userReducer,
+  };
+};
+export default connect(mapStateToProps, {registerAction})(Register);

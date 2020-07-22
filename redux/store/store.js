@@ -15,6 +15,7 @@ import {
   addEpisode,
   updateMovieReducer,
   deleteMovieReducer,
+  getSearchMoviesReducer,
 } from '../reducers/movie_reducer';
 import {
   episodeReducer,
@@ -62,6 +63,9 @@ const reducers = combineReducers({
 
   // Category
   categoriesReducer,
+
+  // Special
+  getSearchMoviesReducer,
 });
 
 const store = createStore(

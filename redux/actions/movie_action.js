@@ -39,6 +39,11 @@ import {
   DELETE_MOVIE_ERROR,
   CLEAR_DELETE_MOVIE_MESSAGE,
   CLEAR_DELETE_MOVIE_ERROR,
+
+  // Search
+  SEARCH_MOVIES_REQUEST,
+  SEARCH_MOVIES_SUCCESS,
+  SEARCH_MOVIES_ERROR,
 } from '../actionTypes';
 import {API} from '../../config/axiosConfig';
 import {getDataEpisodes, addDataEpisodes} from '../actions/episode_action';
@@ -214,5 +219,27 @@ export function clearMessageDeleteMovieAction() {
 export function clearErrorDeleteMovieAction() {
   return function (dispatch) {
     dispatch({type: CLEAR_DELETE_MOVIE_ERROR});
+  };
+}
+
+export function searchMoviesAction(search) {
+  return async (dispatch) => {
+    try {
+      dispatch({
+        type: SEARCH_MOVIES_REQUEST,
+      });
+      const response = await API.get('/movies/search/' + search);
+      dispatch({
+        type: SEARCH_MOVIES_SUCCESS,
+        payload: response.data.data,
+        message: response.data.message,
+        messageBool: true,
+      });
+    } catch (error) {
+      dispatch({
+        type: SEARCH_MOVIES_ERROR,
+        payload: error.response.data.error,
+      });
+    }
   };
 }

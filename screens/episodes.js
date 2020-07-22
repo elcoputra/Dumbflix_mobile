@@ -51,7 +51,7 @@ function Episodes(props) {
           <View style={styles.menuContainer}>
             <TouchableHighlight
               style={styles.btnMenu}
-              onPress={() => props.navigation.pop()}>
+              onPress={() => props.navigation.pop(1)}>
               <AntDesign name="arrowleft" color="white" size={25} />
             </TouchableHighlight>
           </View>

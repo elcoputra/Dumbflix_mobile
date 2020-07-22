@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import Orientation from 'react-native-orientation';
+import React, {useState, useEffect} from 'react';
+import Orientation from 'react-native-orientation-locker';
 import {
   Image,
   Text,
@@ -13,26 +13,24 @@ import {
   FlatList,
 } from 'react-native';
 
-import Navbar from '../components/navbar';
-
 import {connect} from 'react-redux';
 
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import LinearGradient from 'react-native-linear-gradient';
 
+const initial = Orientation.getInitialOrientation();
 const statusBarHeight = StatusBar.currentHeight;
 function Episodes(props) {
   const [orit, setOrit] = useState();
-  const initial = Orientation.getInitialOrientation();
-  if (initial === 'LANDSCAPE-LEFT' || orit !== 'LANDSCAPE-LEFT') {
-    // do something
-    if (orit !== initial) {
+
+  useEffect(() => {
+    const unsubscribe = props.navigation.addListener('focus', () => {
       Orientation.lockToPortrait();
-      setOrit('LANDSCAPE-LEFT');
-    }
-  } else {
-    // do something else
-  }
+    });
+
+    return unsubscribe;
+  }, [props.navigation]);
+
   const {dataDetailMovie} = props.detailMovieReducer;
   const {dataEpisode} = props.episodeReducer;
   return (
@@ -180,7 +178,7 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     paddingVertical: 5,
   },
-  titleInfo: {flex: 4, width: '100%'},
+  titleInfo: {flexGrow: 0.2, width: '100%'},
   titleText: {color: 'white', fontSize: 24, fontWeight: 'bold'},
   anotherInfoContainer: {flexDirection: 'row'},
   descriptionInfo: {

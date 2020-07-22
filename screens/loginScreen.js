@@ -28,7 +28,7 @@ function Login(props) {
     props.loginAction(dataRegister);
     setdataRegister({});
   };
-  const {error, errorBool} = props.userReducer;
+  const {error, errorBool, loading} = props.userReducer;
   return (
     <View style={styles.container}>
       <View style={styles.contentContainer}>
@@ -44,7 +44,9 @@ function Login(props) {
             <View style={styles.inputContainer2}>
               {errorBool ? (
                 <Text style={styles.error}>
-                  {error.data.error
+                  {loading
+                    ? 'Loading.....'
+                    : error.data.error
                     ? error.data.error
                     : error.data.message
                     ? error.data.message
